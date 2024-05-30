@@ -35,6 +35,11 @@
 ## ArgoCD
 
 #### We will use ArgoCD for deployment because if you make a deployment, it is one of the most popular deployment tool.
+
+Şimdi arkadaşlar argonun bu noktada ki görevi şu, argo gidiyor bizim verdiğimiz o repository altındaki helm/myapp chartını hedefi olan asıl görevi olan kubernetes clusterı üzerine deploy etmeye çalışıyor.
+#### The duty of the Argo is 
+
+
 #### In ArgoCD, there are 3 main concepts. Of course, there are many other concepts, but you should know at least these 3 main concepts.
 #### These are the following:
 #### 1) Repository: Argo needs to listen to a repository in order to make a deployment. In this case, this repository is my repository. I am mentioning it in repositories.yaml file.
