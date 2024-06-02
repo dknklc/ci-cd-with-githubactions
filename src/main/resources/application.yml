@@ -12,9 +12,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*" # means please enable and expose all management endpoint supported by the Spring Boot Actuator.
-  health: # To enable and expose the health related information
-    readiness-state:
-      enabled: true
-    liveness-state:
-      enabled: true
+        include: health # means please enable and expose all management endpoint supported by the Spring Boot Actuator.
