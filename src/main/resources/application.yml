@@ -1,7 +1,20 @@
 server:
   port: 8080
 
+
 #This will come from kubernetes vault by the help of external secret manager.
 #spring:
 #  datasource:
 #    password:
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # means please enable and expose all management endpoint supported by the Spring Boot Actuator.
+  health: # To enable and expose the health related information
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
