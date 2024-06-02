@@ -91,7 +91,11 @@ Then, we can give these created secrets to our deployments.
 #### What is the goal of External Secrets Operator?
 The goal of External Secrets Operator is to synchronize secrets from external APIs into Kubernetes. ESO is a collection of custom API resources - ExternalSecret, SecretStore and ClusterSecretStore.
 
-- #### ClusterSecretStore: We mention which secret management tool we are using. Is it Vault or AWS Secret Manage or GCP Secret Manager? This is the component that constructs a bridge to Vault.
+- #### ClusterSecretStore: We mention which secret management tool we are using. Is it Vault or AWS Secret Manage or GCP Secret Manager? This is the component that constructs a bridge to Vault. You will create a ClusterSecretStore, which is what External Secrets Operator uses to store information about how to communicate with the given secrets provider. But before you work with the External Secrets Operator, you’ll need to add your Vault token inside a Kubernetes secret so that the External Secrets Operator can communicate with the secrets provider.
+  ```
+  kubectl create secret generic vault-token --from-literal=token=<YOUR_VAULT_TOKEN>
+  ```
+
   ```
   apiVersion: external-secrets.io/v1beta1
   kind: ClusterSecretStore
@@ -110,7 +114,7 @@ The goal of External Secrets Operator is to synchronize secrets from external AP
 
   ```
 
-- #### ExternalSecret: 
+- #### ExternalSecret: You will create an ExternalSecret, which is the main resource in the External Secrets Operator. The ExternalSecret resource tells ESO to fetch a specific secret from a specific SecretStore and where to put the information. This resource is very important because it defines what secret you’d like to get from the external secret provider, where to put it, which secret store to use, and how often to sync the secret, among several other options.
 
     ```
     apiVersion: external-secrets.io/v1beta1
@@ -134,24 +138,31 @@ The goal of External Secrets Operator is to synchronize secrets from external AP
     ```
 
 #### Installation:
-- First, install vault by using helm
+- First, install vault by using helm;
   ```
   helm install vault hashicorp/vault -n vault --create-namespace
   ```  
-- Then, do the port forwarding to reach vault UI in port 8200
-- Then, create your own secret 
+- Then, do the port forwarding to reach vault UI in port 8200.
+- Then, create your own secret on the UI
 - Then, install external secret manager by using helm
   ```
   helm install external-secrets external-secrets/external-secrets -n external-secrets --create-namespace --set installCRDs=true
   ```
+- Then, create the Kubernetes secret containing the token;
+  ```
+  kubectl create secret generic vault-token --from-literal=token=<YOUR_VAULT_TOKEN> --namespace=argocd
+  ```
 - Then, apply yaml files. First, cluster-secret-store.yaml, then external-secret.yaml
   ```
-  kubectl apply -f ...
+  kubectl apply -f cluster-secret-store.yaml
   ```
-
+  ```
+  kubectl apply -f external-secret.yaml --namespace=argocd
+  ```
 
 
 
 ### REFERENCES
 - https://developer.hashicorp.com/vault/docs
 - https://external-secrets.io/latest/
+- https://github.com/digitalocean/Kubernetes-Starter-Kit-Developers/blob/main/06-kubernetes-secrets/external-secrets-operator.md

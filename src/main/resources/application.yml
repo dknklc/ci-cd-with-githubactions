@@ -1,2 +1,7 @@
 server:
   port: 8080
+
+#This will come from kubernetes vault by the help of external secret manager.
+#spring:
+#  datasource:
+#    password:
